@@ -24,9 +24,33 @@ function submitServerInfo(evt) {
   }
 }
 
-// Create table row element and pass to appendTd function with input value
+// Function to append a delete button 'td' element to the provided 'tr' element
+function appendDeleteBtn(tr) {
+  let deleteBtnTd = document.createElement('td');
+  deleteBtnTd.innerText = 'X';
+  deleteBtnTd.classList.add('delete-btn'); // Add a class for styling
+
+  // Set click event listener on the delete button
+  deleteBtnTd.addEventListener('click', function() {
+    // Remove the parent 'tr' element when the delete button is clicked
+    tr.remove();
+  });
+
+  tr.appendChild(deleteBtnTd);
+}
+
+// Function to update the server table
 function updateServerTable() {
   serverTbody.innerHTML = '';
+
+  // Check if allServers is empty
+  if (Object.keys(allServers).length === 0) {
+    return; // If allServers is empty, do not update the table
+  }
+
+  let totalTipAmt = sumPaymentTotal('tipAmt');
+  let totalServers = Object.keys(allServers).length;
+  let tipAverage = totalServers !== 0 ? totalTipAmt / totalServers : 0;
 
   for (let key in allServers) {
     let curServer = allServers[key];
@@ -34,10 +58,9 @@ function updateServerTable() {
     let newTr = document.createElement('tr');
     newTr.setAttribute('id', key);
 
-    let tipAverage = sumPaymentTotal('tipAmt') / Object.keys(allServers).length;
-
     appendTd(newTr, curServer.serverName);
-    appendTd(newTr, '$' + tipAverage.toFixed(2));
+    appendTd(newTr, '$' + tipAverage.toFixed(2)); // Set earnings to the average tip amount
+    appendDeleteBtn(newTr);
 
     serverTbody.append(newTr);
   }

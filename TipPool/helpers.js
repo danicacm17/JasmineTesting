@@ -1,16 +1,17 @@
 
 // accepts 'tipAmt', 'billAmt', 'tipPercent' and sums total from allPayments objects
 function sumPaymentTotal(type) {
-    let total = 0;
-  
-    for (let key in allPayments) {
-      let payment = allPayments[key];
-  
+  let total = 0;
+
+  for (let key in allPayments) {
+    let payment = allPayments[key];
+    if (type === 'tipAmt' || type === 'billAmt') {
       total += Number(payment[type]);
     }
-  
-    return total;
   }
+
+  return total;
+}
   
   // converts the bill and tip amount into a tip percent
   function calculateTipPercent(billAmt, tipAmt) {
